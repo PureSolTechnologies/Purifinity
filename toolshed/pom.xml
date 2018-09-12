@@ -224,6 +224,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.streaming</groupId>
+				<artifactId>csv.mapper</artifactId>
+				<version>${streaming.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.streaming</groupId>
 				<artifactId>streams</artifactId>
 				<version>${streaming.version}</version>
 			</dependency>

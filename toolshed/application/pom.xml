@@ -47,6 +47,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.streaming</groupId>
+			<artifactId>csv.mapper</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.streaming</groupId>
 			<artifactId>streams</artifactId>
 		</dependency>
 		<dependency>

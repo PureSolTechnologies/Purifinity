@@ -73,7 +73,7 @@ public class ToolShedApplication extends Application {
 
 			PerspectiveService.openPerspective(new ProfilerPerspective());
 
-			Scene scene = new Scene(root, 640, 480);
+			Scene scene = new Scene(root, 1280, 960);
 			applicationStage.setScene(scene);
 			applicationStage.show();
 		    } catch (IOException e) {
@@ -85,7 +85,9 @@ public class ToolShedApplication extends Application {
 		+ "|_   _|___    ___  | |/ ___| | |__    ___   __| |\n" //
 		+ "  | | / _ \\  / _ \\ | |\\___ \\ | '_ \\  / _ \\ / _` |\n" //
 		+ "  | || (_) || (_) || | ___) || | | ||  __/| (_| |\n" //
-		+ "  |_| \\___/  \\___/ |_||____/ |_| |_| \\___| \\__,_|\n"));
+		+ "  |_| \\___/  \\___/ |_||____/ |_| |_| \\___| \\__,_|\n" //
+		+ "\n" //
+		+ "(c) PureSol Technologies\n"));
 
 	splashScreen.addTask(() -> {
 	    Preferences.initialize();

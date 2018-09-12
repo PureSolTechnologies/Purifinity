@@ -15,9 +15,12 @@ import com.puresoltechnologies.toolshed.client.profiles.Profile;
 import com.puresoltechnologies.toolshed.client.tasks.OpenProfileTask;
 
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
@@ -28,6 +31,7 @@ public class OpenProfileViewer extends AbstractViewer {
     private BorderPane borderPane;
     private Label fileLable;
     private Button openProfileButton;
+    private Button textExportsButton;
 
     public OpenProfileViewer() {
 	super("Choose Profile", PartOpenMode.AUTO_AND_MANUAL);
@@ -47,23 +51,40 @@ public class OpenProfileViewer extends AbstractViewer {
 	ToolBar toolBar = new ToolBar();
 	try {
 	    ImageView folderImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/folder.png");
-	    openProfileButton = new Button("Open Profile", folderImage);
+	    openProfileButton = new Button("", folderImage);
 	} catch (IOException e) {
 	    openProfileButton = new Button("Open Profile");
 	}
-	toolBar.getItems().add(openProfileButton);
+	openProfileButton.setTooltip(new Tooltip("Opens a profile for evaluation."));
 	openProfileButton.setOnAction(event -> {
-	    FileChooser fileChooser = new FileChooser();
-	    fileChooser.setTitle("Choose raw profile file");
-	    fileChooser.getExtensionFilters().add(new ExtensionFilter("Raw profile file", "profile.raw"));
-	    File rawProfileFile = fileChooser.showOpenDialog(null);
-	    if (rawProfileFile != null) {
-		openRawProfile(rawProfileFile);
-	    }
+	    openProfile();
 	    event.consume();
 	});
+	try {
+	    ImageView textExportsImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/text_exports.png");
+	    textExportsButton = new Button("", textExportsImage);
+	} catch (IOException e) {
+	    textExportsButton = new Button("Export Profile");
+	}
+	textExportsButton.setTooltip(new Tooltip("Export the loaded profile to text."));
+	textExportsButton.setOnAction(event -> {
+	    saveProfile();
+	    event.consume();
+	});
+
+	toolBar.getItems().addAll(openProfileButton, textExportsButton);
 	borderPane.setTop(toolBar);
 	borderPane.setCenter(fileLable);
+    }
+
+    private void openProfile() {
+	FileChooser fileChooser = new FileChooser();
+	fileChooser.setTitle("Choose raw profile file");
+	fileChooser.getExtensionFilters().add(new ExtensionFilter("Raw profile file", "profile.raw"));
+	File rawProfileFile = fileChooser.showOpenDialog(null);
+	if (rawProfileFile != null) {
+	    openRawProfile(rawProfileFile);
+	}
     }
 
     private void openRawProfile(File rawProfileFile) {
@@ -73,6 +94,13 @@ public class OpenProfileViewer extends AbstractViewer {
 	    ReactiveFX.getStore().publish(Topics.NEW_PROFILE, (Profile) event.getSource().getValue());
 	});
 	FXTasks.run(task, task.getImage());
+    }
+
+    private void saveProfile() {
+	Alert alert = new Alert(AlertType.INFORMATION);
+	alert.setTitle("Implementation Information");
+	alert.setContentText("Not implemented, yet.");
+	alert.showAndWait();
     }
 
     @Override
