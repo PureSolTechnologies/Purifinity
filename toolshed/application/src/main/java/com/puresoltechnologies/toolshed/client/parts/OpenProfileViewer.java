@@ -18,7 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
@@ -29,7 +29,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 public class OpenProfileViewer extends AbstractViewer {
 
     private BorderPane borderPane;
-    private Label fileLable;
+    private TableView statisticsTableView;
     private Button openProfileButton;
     private Button textExportsButton;
 
@@ -46,7 +46,7 @@ public class OpenProfileViewer extends AbstractViewer {
     public void initialize() {
 	borderPane = new BorderPane();
 
-	fileLable = new Label("Open Profile:");
+	statisticsTableView = new TableView();
 
 	ToolBar toolBar = new ToolBar();
 	try {
@@ -74,7 +74,7 @@ public class OpenProfileViewer extends AbstractViewer {
 
 	toolBar.getItems().addAll(openProfileButton, textExportsButton);
 	borderPane.setTop(toolBar);
-	borderPane.setCenter(fileLable);
+	borderPane.setCenter(statisticsTableView);
     }
 
     private void openProfile() {
