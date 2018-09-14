@@ -9,12 +9,14 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.puresoltechnologies.toolshed.server.impl.aggregator.AggregatorThread;
 import com.puresoltechnologies.toolshed.server.impl.config.ToolShedServerConfiguration;
+import com.puresoltechnologies.toolshed.server.impl.config.ToolShedServerConfigurationService;
 import com.puresoltechnologies.toolshed.server.impl.dashboards.DashboardsImpl;
 import com.puresoltechnologies.toolshed.server.impl.filters.CORSFilter;
 import com.puresoltechnologies.toolshed.server.impl.kpis.KPIServiceImpl;
 import com.puresoltechnologies.toolshed.server.impl.metrics.Metrics;
 import com.puresoltechnologies.toolshed.server.impl.nodes.NodeManager;
 import com.puresoltechnologies.toolshed.server.impl.nodes.NodeServiceImpl;
+import com.puresoltechnologies.toolshed.server.impl.ui.WebUI;
 import com.puresoltechnologies.toolshed.server.impl.ws.AnnotatedEchoServer;
 
 import io.dropwizard.Application;
@@ -49,6 +51,7 @@ public class ToolShedServer extends Application<ToolShedServerConfiguration> {
 
     @Override
     public void run(ToolShedServerConfiguration configuration, Environment environment) throws Exception {
+	ToolShedServerConfigurationService.initialize(configuration);
 	MetricRegistry metrics = environment.metrics();
 	Metrics.initialize(metrics);
 
@@ -60,8 +63,9 @@ public class ToolShedServer extends Application<ToolShedServerConfiguration> {
 	// healthChecks.register("database", new DatabaseHealthCheck());
 
 	JerseyEnvironment jersey = environment.jersey();
-	jersey.setUrlPattern("/rest");
+	jersey.setUrlPattern("/");
 	jersey.register(new CORSFilter());
+	jersey.register(WebUI.class);
 	jersey.register(NodeServiceImpl.class);
 	jersey.register(KPIServiceImpl.class);
 	jersey.register(DashboardsImpl.class);

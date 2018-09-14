@@ -8,7 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("/dashboards")
+@Path("/rest/dashboards")
 public class DashboardsImpl {
 
     @GET

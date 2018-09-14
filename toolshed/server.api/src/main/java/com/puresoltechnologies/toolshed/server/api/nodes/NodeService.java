@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.toolshed.server.api.kpis.KPIDefinition;
 
-@Path("/nodes")
+@Path("/rest/nodes")
 public interface NodeService {
 
     @GET
